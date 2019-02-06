@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+{% block styles %}
+{{ super() }}
+<link href="{{ url_for('static', filename='editormd/css/editormd.preview.min.css') }}" rel="stylesheet" />
+<link href="{{ url_for('static', filename='editormd/css/editormd.css') }}" rel="stylesheet" />
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static',filename='editormd/examples/js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',filename='editormd/editormd.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='editormd/lib/marked.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='editormd/lib/prettify.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='editormd/editormd.min.js') }}"></script>
+<script type="text/javascript">
+    editormd.markdownToHTML("xblog-content");
+</script>
+{{ super() }}
+{% endblock %}
+{% block left_side %}
+<div class="content" id="xblog-content">
+    <h2>{{ article.title }}</h2>
+    {{ article.body_html| safe }}
+</div>
+{% endblock %}

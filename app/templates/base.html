@@ -1,0 +1,117 @@
+{% extends "bootstrap/base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block title %} X-Blog {% endblock %}
+{% block styles %}
+{{ super() }}
+<link href="/static/css/custom.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+{{ moment.lang("zh-CN") }}
+{% endblock %}
+{% block navbar %}
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">X-Blog</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="http://www.baidu.com">百度搜索<span class="sr-only">(current)</span></a></li>
+        <li><a href="http://www.google.com">谷歌搜索</a></li>
+      </ul>
+      <form class="navbar-form navbar-left">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="关键词搜索">
+        </div>
+        <button type="submit" class="btn btn-default">搜索</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+      {% if current_user.is_authenticated %}
+      <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <img src="{{ current_user.gravatar(size=18) }}">{{ current_user.username }} <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="{{ url_for('main.user', username=current_user.username)}}">个人资料</a></li>
+            <li><a href="{{ url_for('main.write_article')}}">发表文章</a></li>
+            <li><a href="#">修改密码</a></li>
+            <li><a href="#">修改邮箱</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="/auth/logout">退出</a></li>
+          </ul>
+        </li>
+      {% else %}
+        <li><a data-toggle="modal" data-target="#login" href=""><span class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+        <li><a data-toggle="modal" data-target="#register" href=""><span class="glyphicon glyphicon-user"></span> 注册</a></li>
+      {% endif %}
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+{% endblock %}
+
+{% block content %}
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  {{ message }}
+</div>
+{% endfor %}
+<div class="container">
+  {% block page_content %}
+  <div class="col-sm-9">
+    {% block left_side %}
+      {% block jumbotron %}
+      <div class="jumbotron">
+      {% if current_user.is_authenticated %}
+      <h2>Hello, {{ current_user.username }}!</h2>
+      <p>确认过眼神，你就是对的人！</p>
+      {% else %}
+      <h2>Hello, World!</h2>
+      <p>来都来了，不注册个账号吗？</p>
+      {% endif %}
+
+      </div>
+      {% endblock %}
+      {% block article %}
+      {% endblock %}
+    {% endblock %}
+  </div>
+  <div class="col-sm-3">
+  {% block right_side %}
+  {% endblock %}
+  </div>
+  {% endblock %}
+</div>
+{% block footer %}
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+            </div>
+
+            <div class="col-sm-4" style="text-align: center">
+                <h6>Copyright &copy;2019</h6>
+            </div>
+
+            <div class="col-sm-4">
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}
+{% endblock %}
+

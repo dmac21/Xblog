@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+
+{% block left_side %}
+{% for article in articles %}
+    <div class="entry-box">
+        <div class="media">
+            <div class="media-left" style="position: relative">
+            <a href="/article/{{ article.id }}">
+              <img class="media-object" data-src="holder.js/100x100" alt="100x100" src="/static/cover.jpg">
+            </a>
+            <div style="position:absolute;right:0;bottom:0">
+                <span class="label label-danger">{{ article.articletype.name }}</span>
+                <span class="label label-warning">原创</span>
+            </div>
+          </div>
+          <div class="media-body" style="position:relative">
+              <h3 class="media-heading"><a style="text-decoration:none" href="/article/{{ article.id }}">{{ article.title }}</a></h3>
+            <p>{{ article.abstract }}</p>
+            <div style="position:absolute;right:0;bottom:0">
+                <span style="margin-right: 20px"><i class="fa fa-user fa-lg"></i><a style="text-decoration:none" href="/user/{{ article.author.username }}">  {{ article.author.username }}</a></span>
+                <span style="margin-right: 20px"><i class="fa fa-calendar" aria-hidden="true"></i>  {{ moment(article.timestamp).fromNow() }}</span>
+                <span class="label label-primary" style="margin-right: 20px">浏览 19</span>
+                <span class="label label-success" style="margin-right: 20px">评论 1</span>
+                <span style="margin-right: 20px"><i class="fa fa-heart" aria-hidden="true"></i>  999</span>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

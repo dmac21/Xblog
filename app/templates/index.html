@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block article %}
+<div id="register" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-title">
+                <h2 class="text-center">注册</h2>
+            </div>
+            <div class="modal-body">
+                <form class="form-group" action="/auth/register" method="post">
+                        {{ registerform.csrf_token }}
+                        <div class="form-group">
+                            <!--<label for="">用户名</label>-->
+                            <!--<input class="form-control" type="text" placeholder="6-15位字母或数字">-->
+                            {{ wtf.form_field(registerform.username) }}
+                        </div>
+                        <div class="form-group">
+                            <!--<label for="">密码</label>-->
+                            <!--<input class="form-control" type="password" placeholder="至少6位字母或数字">-->
+                            {{ wtf.form_field(registerform.password) }}
+                        </div>
+                        <div class="form-group">
+                            <!--<label for="">再次输入密码</label>-->
+                            <!--<input class="form-control" type="password" placeholder="至少6位字母或数字">-->
+                            {{ wtf.form_field(registerform.password2) }}
+                        </div>
+                        <div class="form-group">
+                            <!--<label for="">邮箱</label>-->
+                            <!--<input class="form-control" type="email" placeholder="例如:123@123.com">-->
+                            {{ wtf.form_field(registerform.email) }}
+                        </div>
+                        <div class="text-right">
+                            {{ wtf.form_field(registerform.register, class="btn btn-primary") }}
+                            {{ wtf.form_field(registerform.cancel, class="btn btn-danger") }}
+                            <!--<button class="btn btn-primary" type="submit">提交</button>-->
+                            <!--<button class="btn btn-danger" data-dismiss="modal">取消</button>-->
+                        </div>
+                        <a href="" data-toggle="modal" data-dismiss="modal" data-target="#login">已有账号？点我登录</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 登录窗口 -->
+<div id="login" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-title">
+                <h2 class="text-center">登录</h2>
+            </div>
+            <div class="modal-body">
+                <form class="form-group" action="/auth/login" method="post">
+                        {{ loginform.csrf_token }}
+                        <div class="form-group">
+                            <!--<label for="">用户名</label>-->
+                            <!--<input class="form-control" type="text" placeholder="">-->
+                            {{ wtf.form_field(loginform.username) }}
+                        </div>
+                        <div class="form-group">
+                            <!--<label for="">密码</label>-->
+                            <!--<input class="form-control" type="password" placeholder="">-->
+                            {{ wtf.form_field(loginform.password) }}
+                        </div>
+                        <div class="form-group">
+                            <!--<label for="">密码</label>-->
+                            <!--<input class="form-control" type="password" placeholder="">-->
+                            {{ wtf.form_field(loginform.remember_me) }}
+                        </div>
+                        <div class="text-right">
+                            {{ wtf.form_field(loginform.login, class="btn btn-primary") }}
+                            {{ wtf.form_field(loginform.cancel, class="btn btn-danger") }}
+                            <!--<button class="btn btn-primary" type="submit">登录</button>-->
+                            <!--<button class="btn btn-danger" data-dismiss="modal">取消</button>-->
+                        </div>
+                        <a href="" data-toggle="modal" data-dismiss="modal" data-target="#register">还没有账号？点我注册</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% for article in articles %}
+    <div class="entry-box">
+        <div class="media">
+          <div class="media-left" style="position: relative">
+            <a href="/article/{{ article.id }}">
+              <img class="media-object" data-src="holder.js/100x100" alt="100x100" src="/static/cover.jpg">
+            </a>
+            <div style="position:absolute;right:0;bottom:0">
+                <span class="label label-danger">{{ article.articletype.name }}</span>
+                <span class="label label-warning">原创</span>
+            </div>
+          </div>
+          <div class="media-body" style="position:relative">
+              <h3 class="media-heading"><a style="text-decoration:none" href="/article/{{ article.id }}">{{ article.title }}</a></h3>
+            <p>{{ article.abstract }}</p>
+            <div style="position:absolute;right:0;bottom:0">
+                <span style="margin-right: 20px"><i class="fa fa-user fa-lg"></i><a style="text-decoration:none" href="/user/{{ article.author.username }}">  {{ article.author.username }}</a></span>
+                <span style="margin-right: 20px"><i class="fa fa-calendar" aria-hidden="true"></i>  {{ moment(article.timestamp).format('YYYY年MM月DD日') }}</span>
+                <span class="label label-primary" style="margin-right: 20px">浏览 19</span>
+                <span class="label label-success" style="margin-right: 20px">评论 1</span>
+                <span style="margin-right: 20px"><i class="fa fa-heart" aria-hidden="true"></i>  999</span>
+            </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+    <div style="text-align: center">
+      {% import "_macros.html" as macros %}
+        <div class="pagination">
+         {{ macros.pagination_widget(pagination, '.index') }}
+     </div>
+    </div>
+{% endblock %}
+
+
+{% block right_side %}
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">公告面板</h3>
+      </div>
+      <div class="panel-body">
+        <p><i class="fa fa-user fa-lg"></i> 博主：D-mac</p>
+        <p><i class="fa fa-wechat fa-lg"></i> Wechat：NO1Tracy-Mcgrady</p>
+        <p><i class="fa fa-envelope fa-lg"></i> Email：386501732@qq.com</p>
+        <p><i class="fa fa-github fa-lg"></i> GitHub：<a class="label label-primary" href="https://github.com/dmac21">传送门</a></p>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">博客统计</h3>
+      </div>
+      <div class="panel-body">
+        <p>访问量：<span class="badge">70</span></p>
+        <p>
+            博文总数：<span class="badge">1</span>
+        </p>
+        <p>
+            <a href="/article-sources/1/">原创</a>：
+            <span class="badge">0</span>
+            <a href="/article-sources/2/">转载</a>：
+            <span class="badge">0</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+          <h3 class="panel-title">文章分类</h3>
+      </div>
+      <div class="list-group">
+          {% for articletype in articletypes %}
+          <a href="/articletype/{{ articletype.id }}" class="list-group-item">{{ articletype.name }}</a>
+          {% endfor %}
+      </div>
+    </div>
+
+    <div class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title">热门文章Top5</h3>
+      </div>
+      <div class="list-group">
+          <a href="#" class="list-group-item">（一）</a>
+          <a href="#" class="list-group-item">（二）</a>
+          <a href="#" class="list-group-item">（三）</a>
+          <a href="#" class="list-group-item">（四）</a>
+          <a href="#" class="list-group-item">（五）</a>
+      </div>
+    </div>
+
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title">标签云</h3>
+      </div>
+      <div class="panel-body">
+        文章关键词
+      </div>
+    </div>
+{% endblock %}

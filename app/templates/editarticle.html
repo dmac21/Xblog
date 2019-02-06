@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static',filename='editormd/css/editormd.css') }}"/>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static',filename='editormd/examples/js/jquery.min.js') }}"></script>
+<script src="{{ url_for('static',filename='editormd/editormd.min.js') }}"></script>
+<script type="text/javascript">
+    $(function () {
+        editormd("xblog-editormd", {
+            // width: "100%", 请不要添加
+            height: 640,
+            syncScrolling: "single",
+            path: "{{ url_for('static',filename='editormd/lib/') }}",
+            saveHTMLToTextarea : true
+        });
+    });
+</script>
+{{ super() }}
+{% endblock %}
+{% block page_content %}
+<form method="post" action="">
+{{ articleform.csrf_token }}
+{{ wtf.form_field(articleform.title) }}
+{{ wtf.form_field(articleform.article_type) }}
+{{ articleform.body.label }}
+<div id="xblog-editormd" class="editormd">
+{{ articleform.body() }}
+</div>
+{{ wtf.form_field(articleform.abstract) }}
+{{ wtf.form_field(articleform.submit, class="btn btn-primary") }}
+{{ wtf.form_field(articleform.cancel, class="btn btn-danger") }}
+</form>
+
+{% endblock %}
