@@ -50,7 +50,7 @@
             <li><a href="#">修改密码</a></li>
             <li><a href="#">修改邮箱</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="/auth/logout">退出</a></li>
+            <li><a href="/auth/logout">退出登录</a></li>
           </ul>
         </li>
       {% else %}
@@ -97,19 +97,9 @@
   {% endblock %}
 </div>
 {% block footer %}
-<footer>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-            </div>
-
-            <div class="col-sm-4" style="text-align: center">
-                <h6>Copyright &copy;2019</h6>
-            </div>
-
-            <div class="col-sm-4">
-            </div>
-        </div>
+<footer class="footer navbar-bottom ">
+    <div class="container" style="text-align: center; color: white">
+      <h6>Copyright &copy;2019</h6>
     </div>
 </footer>
 {% endblock %}

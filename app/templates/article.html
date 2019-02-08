@@ -19,5 +19,28 @@
 <div class="content" id="xblog-content">
     <h2>{{ article.title }}</h2>
     {{ article.body_html| safe }}
+    <hr>
+    <div>
+        <p>
+            <span class="glyphicon glyphicon-time">
+                博文最后更新时间：
+            </span>
+            {% if article.update_timestamp %}
+            <span>{{ moment(article.update_timestamp).format('LLL') }}</span>
+            {% else %}
+            <span>{{ moment(article.timestamp).format('LLL') }}</span>
+            {% endif %}
+        </p>
+    </div>
+    {% if current_user.is_authenticated %}
+    <div style="text-align: right">
+        <a href="/update_article/{{ article.id }}">
+            <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-pencil"></span>
+                编辑
+            </button>
+        </a>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

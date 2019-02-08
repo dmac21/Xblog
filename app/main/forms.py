@@ -41,9 +41,9 @@ class EditProfileAdminForm(EditProfileForm):
 
 
 class ArticleForm(FlaskForm):
-    title = StringField(u'文章标题', validators=[DataRequired(), Length(1, 15, message=u"长度必须在15个字符以内")], render_kw={'placeholder': '1-15个文字', 'autocomplete': 'off'})
+    title = StringField(u'文章标题', validators=[DataRequired(), Length(1, 50, message=u"长度必须在50个字符以内")], render_kw={'placeholder': '1-50个文字', 'autocomplete': 'off'})
     article_type = SelectField(u'文章归类', coerce=int)
-    abstract = TextAreaField(u'文章摘要', validators=[DataRequired(), Length(1, 60, message=u"长度必须在60个字符以内")], render_kw={'placeholder': '1-60个文字', 'autocomplete': 'off'})
+    abstract = TextAreaField(u'文章摘要', validators=[DataRequired(), Length(1, 150, message=u"长度必须在150个字符以内")], render_kw={'placeholder': '1-150个文字', 'autocomplete': 'off'})
     body = TextAreaField(u'文章正文', validators=[DataRequired()], render_kw={'placeholder': '写点什么吧', 'autocomplete': 'off'})
     submit = SubmitField(u'提交')
     cancel = SubmitField(u'取消', render_kw={'data-dismiss': 'modal'})

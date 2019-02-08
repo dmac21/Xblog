@@ -8,7 +8,7 @@ from ..auth.forms import LoginForm, RegisterForm
 from .forms import EditProfileForm, EditProfileAdminForm, ArticleForm
 from ..models import User, Role, Article, Articletype
 from flask_login import login_required, current_user
-
+from datetime import datetime
 
 @main.route('/')
 def index():
@@ -35,6 +35,27 @@ def write_article():
         flash(u"发布文章成功！")
         return redirect(url_for('main.index'))
     return render_template('editarticle.html', articleform=articleform)
+
+
+@main.route('/update_article/<int:id>', methods=['GET', 'POST'])
+@login_required
+def update_article(id):
+    article = Article.query.filter_by(id=id).first()
+    articleform = ArticleForm(title=article.title, abstract=article.abstract, body=article.body, article_type=article.articletype_id)
+    if articleform.validate_on_submit():
+        body_html = request.form['xblog-editormd-html-code']
+        article.title = articleform.title.data
+        article.abstract = articleform.abstract.data
+        article.body = articleform.body.data
+        article.body_html = body_html
+        article.articletype_id = articleform.article_type.data
+        article.author = current_user
+        article.update_timestamp = datetime.utcnow()
+        db.session.add(article)
+        db.session.commit()
+        flash(u"更新文章成功！")
+        return redirect(url_for('main.index'))
+    return render_template('update_article.html', articleform=articleform)
 
 
 @main.route('/user/<username>')
