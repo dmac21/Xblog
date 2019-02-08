@@ -75,7 +75,8 @@ def user(username):
 @main.route('/article/<int:id>')
 def article(id):
     article = Article.query.filter_by(id=id).first()
-    return render_template('article.html', article=article)
+    articletypes = Articletype.query.all()
+    return render_template('article.html', article=article, articletypes=articletypes)
 
 
 @main.route('/articletype/<int:id>')
