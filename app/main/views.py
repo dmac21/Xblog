@@ -6,7 +6,7 @@ from . import main
 from .. import db
 from ..auth.forms import LoginForm, RegisterForm
 from .forms import EditProfileForm, EditProfileAdminForm, ArticleForm
-from ..models import User, Role, Article, Articletype
+from ..models import User, Role, Article, Articletype, Articlesource
 from flask_login import login_required, current_user
 from datetime import datetime
 
@@ -18,7 +18,8 @@ def index():
     pagination = Article.query.order_by(Article.timestamp.desc()).paginate(page, per_page=10, error_out=False)
     articles = pagination.items
     articletypes = Articletype.query.all()
-    return render_template('index.html', loginform=loginform, registerform=registerform, articles=articles, pagination=pagination, articletypes=articletypes)
+    articlesources = Articlesource.query.all()
+    return render_template('index.html', loginform=loginform, registerform=registerform, articles=articles, pagination=pagination, articletypes=articletypes, articlesources=articlesources)
 
 
 @main.route('/write_article', methods=['GET', 'POST'])
@@ -29,7 +30,7 @@ def write_article():
         body_html = request.form['xblog-editormd-html-code']
         articletype = Articletype.query.filter_by(name=articleform.article_type.data).first()
         article = Article(title=articleform.title.data, abstract=articleform.abstract.data, body=articleform.body.data,
-                          articletype_id=articleform.article_type.data, body_html=body_html, author=current_user)
+                          articletype_id=articleform.article_type.data, articlesource_id=articleform.article_source.data, body_html=body_html, author=current_user)
         db.session.add(article)
         db.session.commit()
         flash(u"发布文章成功！")
@@ -41,7 +42,8 @@ def write_article():
 @login_required
 def update_article(id):
     article = Article.query.filter_by(id=id).first()
-    articleform = ArticleForm(title=article.title, abstract=article.abstract, body=article.body, article_type=article.articletype_id)
+    articleform = ArticleForm(title=article.title, abstract=article.abstract, body=article.body,
+                              article_source=article.articlesource_id, article_type=article.articletype_id)
     if articleform.validate_on_submit():
         body_html = request.form['xblog-editormd-html-code']
         article.title = articleform.title.data
@@ -49,6 +51,7 @@ def update_article(id):
         article.body = articleform.body.data
         article.body_html = body_html
         article.articletype_id = articleform.article_type.data
+        article.articlesource_id=articleform.article_source.data
         article.author = current_user
         article.update_timestamp = datetime.utcnow()
         db.session.add(article)
@@ -62,29 +65,49 @@ def update_article(id):
 @login_required
 def user(username):
     editprofileform = EditProfileForm()
+    page = request.args.get('page', 1, type=int)
+    pagination = Article.query.order_by(Article.timestamp.desc()).paginate(page, per_page=10, error_out=False)
     articletypes = Articletype.query.all()
+    articlesources = Articlesource.query.all()
     user = User.query.filter_by(username=username).first()
     editprofileadminform = EditProfileAdminForm(user)
     if user is None:
         abort(404)
     articles = Article.query.filter_by(author=user).order_by(Article.timestamp.desc()).all()
     return render_template('user.html', user=user, editprofileform=editprofileform, editprofileadminform=editprofileadminform,
-                           articles=articles, articletypes=articletypes)
+                           articles=articles, pagination=pagination, articletypes=articletypes, articlesources=articlesources)
 
 
 @main.route('/article/<int:id>')
 def article(id):
     article = Article.query.filter_by(id=id).first()
     articletypes = Articletype.query.all()
-    return render_template('article.html', article=article, articletypes=articletypes)
+    page = request.args.get('page', 1, type=int)
+    pagination = Article.query.order_by(Article.timestamp.desc()).paginate(page, per_page=10, error_out=False)
+    articlesources = Articlesource.query.all()
+    return render_template('article.html', article=article, pagination=pagination, articletypes=articletypes, articlesources=articlesources)
 
 
 @main.route('/articletype/<int:id>')
 def articletype(id):
     articletypes = Articletype.query.all()
+    page = request.args.get('page', 1, type=int)
+    pagination = Article.query.order_by(Article.timestamp.desc()).paginate(page, per_page=10, error_out=False)
+    articlesources = Articlesource.query.all()
     articletype = Articletype.query.filter_by(id=id).first()
     articles = Article.query.filter_by(articletype=articletype).order_by(Article.timestamp.desc()).all()
-    return render_template('articles.html', articles=articles, articletypes=articletypes)
+    return render_template('articles.html', articles=articles, pagination=pagination, articletypes=articletypes, articlesources=articlesources)
+
+
+@main.route('/articlesource/<int:id>')
+def articlesource(id):
+    page = request.args.get('page', 1, type=int)
+    pagination = Article.query.order_by(Article.timestamp.desc()).paginate(page, per_page=10, error_out=False)
+    articletypes = Articletype.query.all()
+    articlesources = Articlesource.query.all()
+    articlesource = Articlesource.query.filter_by(id=id).first()
+    articles = Article.query.filter_by(articlesource=articlesource).order_by(Article.timestamp.desc()).all()
+    return render_template('articles.html', articles=articles, pagination=pagination, articletypes=articletypes, articlesources=articlesources)
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])

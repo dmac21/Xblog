@@ -167,6 +167,7 @@ class Article(db.Model):
     update_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     articletype_id = db.Column(db.Integer, db.ForeignKey('articletypes.id'))
+    articlesource_id = db.Column(db.Integer, db.ForeignKey('articlesources.id'))
 
     @staticmethod
     def generate_fake(count=100):
@@ -195,3 +196,10 @@ class Articletype(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), unique=True)
     articles = db.relationship('Article', backref='articletype', lazy='dynamic')
+
+
+class Articlesource(db.Model):
+    __tablename__ = 'articlesources'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(50), unique=True)
+    articles = db.relationship('Article', backref='articlesource', lazy='dynamic')

@@ -4,6 +4,8 @@
 {% block title %} X-Blog {% endblock %}
 {% block styles %}
 {{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link href="/static/css/custom.css" rel="stylesheet">
 <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 {% endblock %}
@@ -99,7 +101,7 @@
 {% block footer %}
 <footer class="footer navbar-bottom ">
     <div class="container" style="text-align: center; color: white">
-      <h6>Copyright &copy;2019</h6>
+      <h6>Copyright &copy;2018</h6>
     </div>
 </footer>
 {% endblock %}

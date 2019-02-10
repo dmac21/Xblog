@@ -23,6 +23,7 @@
 <form method="post" action="">
 {{ articleform.csrf_token }}
 {{ wtf.form_field(articleform.title) }}
+{{ wtf.form_field(articleform.article_source) }}
 {{ wtf.form_field(articleform.article_type) }}
 {{ articleform.body.label }}
 <div id="xblog-editormd" class="editormd">

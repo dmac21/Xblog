@@ -142,7 +142,7 @@
                     </a>
                     <div style="position:absolute;right:0;bottom:0">
                         <span class="label label-danger">{{ article.articletype.name }}</span>
-                        <span class="label label-warning">原创</span>
+                        <span class="label label-warning">{{ article.articlesource.name }}</span>
                     </div>
                 </div>
                   <div class="media-body" style="position:relative">
@@ -150,8 +150,8 @@
                     <p>{{ article.abstract }}</p>
                     <div style="position:absolute;right:0;bottom:0">
                         <span style="margin-right: 20px"><i class="fa fa-calendar" aria-hidden="true"></i>  {{ moment(article.timestamp).fromNow() }}</span>
-                        <span class="label label-primary" style="margin-right: 20px">浏览 19</span>
-                        <span class="label label-success" style="margin-right: 20px">评论 1</span>
+                        <span class="label label-primary" style="margin-right: 20px">浏览 999</span>
+                        <span class="label label-success" style="margin-right: 20px">评论 999</span>
                         <span style="margin-right: 20px"><i class="fa fa-heart" aria-hidden="true"></i>  999</span>
                     </div>
                     </div>
@@ -163,4 +163,5 @@
 		<p>用于显示所有评论</p>
 	</div>
 </div>
+<br>
 {% endblock %}

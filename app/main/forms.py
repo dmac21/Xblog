@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, Regexp, EqualTo
 from wtforms import ValidationError
-from ..models import User, Role, Articletype
+from ..models import User, Role, Articletype, Articlesource
 
 
 class EditProfileForm(FlaskForm):
@@ -42,6 +42,7 @@ class EditProfileAdminForm(EditProfileForm):
 
 class ArticleForm(FlaskForm):
     title = StringField(u'文章标题', validators=[DataRequired(), Length(1, 50, message=u"长度必须在50个字符以内")], render_kw={'placeholder': '1-50个文字', 'autocomplete': 'off'})
+    article_source = SelectField(u'文章来源', coerce=int)
     article_type = SelectField(u'文章归类', coerce=int)
     abstract = TextAreaField(u'文章摘要', validators=[DataRequired(), Length(1, 150, message=u"长度必须在150个字符以内")], render_kw={'placeholder': '1-150个文字', 'autocomplete': 'off'})
     body = TextAreaField(u'文章正文', validators=[DataRequired()], render_kw={'placeholder': '写点什么吧', 'autocomplete': 'off'})
@@ -51,4 +52,4 @@ class ArticleForm(FlaskForm):
     def __init__(self, *args, **kwargs):
         super(ArticleForm, self).__init__(*args, **kwargs)
         self.article_type.choices = [(articletype.id, articletype.name) for articletype in Articletype.query.order_by(Articletype.name).all()]
-
+        self.article_source.choices = [(articlesource.id, articlesource.name) for articlesource in Articlesource.query.order_by(Articlesource.name).all()]
