@@ -81,6 +81,7 @@ def user(username):
 @main.route('/article/<int:id>')
 def article(id):
     article = Article.query.filter_by(id=id).first()
+    article.insert_views()
     articletypes = Articletype.query.all()
     page = request.args.get('page', 1, type=int)
     pagination = Article.query.order_by(Article.timestamp.desc()).paginate(page, per_page=10, error_out=False)

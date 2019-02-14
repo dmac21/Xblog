@@ -164,10 +164,16 @@ class Article(db.Model):
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    views = db.Column(db.Integer, default=0)
     update_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     articletype_id = db.Column(db.Integer, db.ForeignKey('articletypes.id'))
     articlesource_id = db.Column(db.Integer, db.ForeignKey('articlesources.id'))
+
+    def insert_views(self):
+        self.views += 1
+        db.session.add(self)
+        db.session.commit()
 
     @staticmethod
     def generate_fake(count=100):

@@ -107,7 +107,7 @@
             <div style="position:absolute;right:0;bottom:0">
                 <span style="margin-right: 20px"><i class="fa fa-user fa-lg"></i><a style="text-decoration:none" href="/user/{{ article.author.username }}">  {{ article.author.username }}</a></span>
                 <span style="margin-right: 20px"><i class="fa fa-calendar" aria-hidden="true"></i>  {{ moment(article.timestamp).format('YYYY年MM月DD日') }}</span>
-                <span class="label label-primary" style="margin-right: 20px">浏览 999</span>
+                <span class="label label-primary" style="margin-right: 20px">浏览 {{ article.views }}</span>
                 <span class="label label-success" style="margin-right: 20px">评论 999</span>
                 <span style="margin-right: 20px"><i class="fa fa-heart" aria-hidden="true"></i>  999</span>
             </div>
