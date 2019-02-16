@@ -17,7 +17,7 @@ class LoginForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
-    username = StringField(u'用户名', validators=[DataRequired(), Length(1, 64),
+    username = StringField(u'用户名', validators=[DataRequired(), Length(6, 15),
                            Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0, u'用户名只能包含字母、数字、点和下划线')],
                            render_kw={'placeholder': '6-15位字母或数字', 'autocomplete': 'off'})
     password = PasswordField(u'密码', validators=[DataRequired(), EqualTo('password2', message=u'两次输入的密码必须一致')],

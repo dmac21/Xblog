@@ -17,8 +17,8 @@ def login():
         if user is not None and user.verify_password(form.password.data):
             login_user(user, form.remember_me.data)
             return redirect(request.args.get('next') or url_for('main.index'))
-        flash(u"无效的用户名或者密码")
-    return 'There is no login page!'
+        flash(u"用户名或者密码错误，请重新登录！")
+    return redirect(url_for('main.index'))
 
 
 @auth.route('/logout')
@@ -39,7 +39,8 @@ def register():
         send_email(user.email, '确认你的账户', 'auth/email/confirm', user=user, token=token)
         flash(u"一封确认邮件已经发送到你的邮箱，请到邮箱查收并确认！")
         return redirect(url_for('main.index'))
-    return 'There is no register page!'
+    flash(u'注册信息验证不通过，请重新核对后输入！')
+    return redirect(url_for('main.index'))
 
 
 @auth.route('/confirm/<token>')
