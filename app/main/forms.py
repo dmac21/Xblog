@@ -53,3 +53,10 @@ class ArticleForm(FlaskForm):
         super(ArticleForm, self).__init__(*args, **kwargs)
         self.article_type.choices = [(articletype.id, articletype.name) for articletype in Articletype.query.order_by(Articletype.name).all()]
         self.article_source.choices = [(articlesource.id, articlesource.name) for articlesource in Articlesource.query.order_by(Articlesource.name).all()]
+
+
+class CommentFrom(FlaskForm):
+    nickname = StringField(u'昵称', validators=[DataRequired(), Length(1, 50, message=u"长度必须在10个字符以内")], render_kw={'autocomplete': 'off'})
+    email = StringField(u'邮箱', validators=[DataRequired(), Length(1, 64), Email()], render_kw={'autocomplete': 'off'})
+    body = TextAreaField(u'评论内容', validators=[DataRequired()], render_kw={'autocomplete': 'off'})
+    submit = SubmitField(u'提交')

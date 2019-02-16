@@ -5,7 +5,7 @@ from flask import render_template, abort, flash, redirect, url_for, request
 from . import main
 from .. import db
 from ..auth.forms import LoginForm, RegisterForm
-from .forms import EditProfileForm, EditProfileAdminForm, ArticleForm
+from .forms import EditProfileForm, EditProfileAdminForm, ArticleForm, CommentFrom
 from ..models import User, Role, Article, Articletype, Articlesource, Blogview
 from flask_login import login_required, current_user
 from datetime import datetime
@@ -90,7 +90,8 @@ def user(username):
 def article(id):
     article = Article.query.filter_by(id=id).first()
     article.add_view()
-    return render_template('article.html', article=article)
+    commentform = CommentFrom()
+    return render_template('article.html', article=article, commentform=commentform)
 
 
 @main.route('/articletype/<int:id>')
