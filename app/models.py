@@ -170,7 +170,7 @@ class Article(db.Model):
     articletype_id = db.Column(db.Integer, db.ForeignKey('articletypes.id'))
     articlesource_id = db.Column(db.Integer, db.ForeignKey('articlesources.id'))
 
-    def insert_views(self):
+    def add_view(self):
         self.views += 1
         db.session.add(self)
         db.session.commit()
@@ -209,3 +209,19 @@ class Articlesource(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), unique=True)
     articles = db.relationship('Article', backref='articlesource', lazy='dynamic')
+
+
+class Blogview(db.Model):
+    __tablename__ = 'blogviews'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    views = db.Column(db.Integer, default=0)
+
+    def add_view(self):
+        v = self.query.first()
+        if not v:
+            v = Blogview(views=0)
+            db.session.add(v)
+            db.session.commit()
+        v.views += 1
+        db.session.add(self)
+        db.session.commit()

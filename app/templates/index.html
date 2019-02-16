@@ -1,94 +1,6 @@
 {% extends "base.html" %}
 
 {% block article %}
-<div id="register" class="modal fade" tabindex="-1">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-title">
-                <h2 class="text-center">注册</h2>
-            </div>
-            <div class="modal-body">
-                <form class="form-group" action="/auth/register" method="post">
-                        {{ registerform.csrf_token }}
-                        <div class="form-group">
-                            <!--<label for="">用户名</label>-->
-                            <!--<input class="form-control" type="text" placeholder="6-15位字母或数字">-->
-                            {{ wtf.form_field(registerform.username) }}
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="">密码</label>-->
-                            <!--<input class="form-control" type="password" placeholder="至少6位字母或数字">-->
-                            {{ wtf.form_field(registerform.password) }}
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="">再次输入密码</label>-->
-                            <!--<input class="form-control" type="password" placeholder="至少6位字母或数字">-->
-                            {{ wtf.form_field(registerform.password2) }}
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="">邮箱</label>-->
-                            <!--<input class="form-control" type="email" placeholder="例如:123@123.com">-->
-                            {{ wtf.form_field(registerform.email) }}
-                        </div>
-                        <div class="text-right">
-                            {{ wtf.form_field(registerform.register, class="btn btn-primary") }}
-                            {{ wtf.form_field(registerform.cancel, class="btn btn-danger") }}
-                            <!--<button class="btn btn-primary" type="submit">提交</button>-->
-                            <!--<button class="btn btn-danger" data-dismiss="modal">取消</button>-->
-                        </div>
-                        <a href="" data-toggle="modal" data-dismiss="modal" data-target="#login">已有账号？点我登录</a>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- 登录窗口 -->
-<div id="login" class="modal fade">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
-            </div>
-            <div class="modal-title">
-                <h2 class="text-center">登录</h2>
-            </div>
-            <div class="modal-body">
-                <form class="form-group" action="/auth/login" method="post">
-                        {{ loginform.csrf_token }}
-                        <div class="form-group">
-                            <!--<label for="">用户名</label>-->
-                            <!--<input class="form-control" type="text" placeholder="">-->
-                            {{ wtf.form_field(loginform.username) }}
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="">密码</label>-->
-                            <!--<input class="form-control" type="password" placeholder="">-->
-                            {{ wtf.form_field(loginform.password) }}
-                        </div>
-                        <div class="form-group">
-                            <!--<label for="">密码</label>-->
-                            <!--<input class="form-control" type="password" placeholder="">-->
-                            {{ wtf.form_field(loginform.remember_me) }}
-                        </div>
-                        <div class="text-right">
-                            {{ wtf.form_field(loginform.login, class="btn btn-primary") }}
-                            {{ wtf.form_field(loginform.cancel, class="btn btn-danger") }}
-                            <!--<button class="btn btn-primary" type="submit">登录</button>-->
-                            <!--<button class="btn btn-danger" data-dismiss="modal">取消</button>-->
-                        </div>
-                        <a href="" data-toggle="modal" data-dismiss="modal" data-target="#register">还没有账号？点我注册</a>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 {% include '_articles.html' %}
     <div style="text-align: center">
       {% import "_macros.html" as macros %}
@@ -117,9 +29,9 @@
         <h3 class="panel-title">博客统计</h3>
       </div>
       <div class="panel-body">
-        <p>访问量：<span class="badge">0</span></p>
+        <p>访问量：<span class="badge">{{ blogviews.views }}</span></p>
         <p>
-            博文总数：<span class="badge">{{ pagination.total }}</span>
+            博文总数：<span class="badge">{{ total_article_count }}</span>
         </p>
         <p>
             {% for articlesource in articlesources %}
@@ -146,11 +58,9 @@
         <h3 class="panel-title">热门文章Top5</h3>
       </div>
       <div class="list-group">
-          <a href="#" class="list-group-item">（一）</a>
-          <a href="#" class="list-group-item">（二）</a>
-          <a href="#" class="list-group-item">（三）</a>
-          <a href="#" class="list-group-item">（四）</a>
-          <a href="#" class="list-group-item">（五）</a>
+          {% for article in top5_articles %}
+          <a href="/article/{{ article.id }}" class="list-group-item">{{ article.title }}</a>
+          {% endfor %}
       </div>
     </div>
 
