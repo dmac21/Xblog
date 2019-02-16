@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Author  : dmac
 
-from flask import render_template, abort, flash, redirect, url_for, request
+from flask import render_template, abort, flash, redirect, url_for, request, jsonify
 from . import main
 from .. import db
 from ..auth.forms import LoginForm, RegisterForm
@@ -9,6 +9,7 @@ from .forms import EditProfileForm, EditProfileAdminForm, ArticleForm, CommentFr
 from ..models import User, Role, Article, Articletype, Articlesource, Blogview
 from flask_login import login_required, current_user
 from datetime import datetime
+import os
 
 
 @main.app_context_processor
@@ -139,3 +140,27 @@ def edit_profile_admin(id):
         db.session.commit()
         flash(u"你的资料已经成功修改")
         return redirect(url_for('.user', username=user.username))
+
+
+@main.route('/upload', methods=['POST'])
+@login_required
+def upload():
+    parent_path = os.path.dirname(__file__)
+    app_path = os.path.dirname(parent_path)
+    upload_path = app_path + '/static/upload/'
+
+    file = request.files.get('editormd-image-file')
+    if not file:
+        res = {
+            'success': 0,
+            'message': u'图片格式异常'
+        }
+    else:
+        file_path = upload_path + file.filename
+        file.save(file_path)
+        res = {
+            'success': 1,
+            'message': u'图片上传成功',
+            'url': '/static/upload/{}'.format(file.filename)
+        }
+    return jsonify(res)

@@ -8,12 +8,20 @@
 <script src="{{ url_for('static',filename='editormd/editormd.min.js') }}"></script>
 <script type="text/javascript">
     $(function () {
-        editormd("xblog-editormd", {
+        var testEditor = editormd("xblog-editormd", {
             // width: "100%", 请不要添加
             height: 640,
             syncScrolling: "single",
             path: "{{ url_for('static',filename='editormd/lib/') }}",
-            saveHTMLToTextarea : true
+            saveHTMLToTextarea : true,
+            imageUpload: true, //开启图片上传
+            imageUploadURL: '/upload', //图片上传后台地址
+            onload: function() {
+                    // 引入插件 执行监听方法
+                    editormd.loadPlugin("/static/editormd/plugins/image-handle-paste/image-handle-paste", function(){
+                        testEditor.imagePaste();
+                    });
+            }
         });
     });
 </script>
