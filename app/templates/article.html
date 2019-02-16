@@ -42,6 +42,21 @@
         </a>
     </div>
     {% endif %}
+<hr>
+<div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>如果觉得对你有帮助，可以请我喝杯茶或者吃个饭</div>
+  <button class="btn btn-danger btn-sm" id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+    <div id="QR" class="row" style="display: none">
+        <div class="col-lg-6" style="text-align: right">
+            <img width="60%" height="60%" id="wechat_qr" src="/static/wechatpay.jpg" alt="微信支付">
+        </div>
+        <div class="col-lg-6" style="text-align: left">
+            <img width="60%" height="60%" id="alipay_qr" src="/static/alipay.jpg" alt="支付宝">
+        </div>
+    </div>
+</div>
 </div>
 <hr>
 <h4><i class="fa fa-comment"></i>发表评论</h4>
