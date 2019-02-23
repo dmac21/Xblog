@@ -36,6 +36,7 @@ allowedFileExtensions: ['png','jpg','jpeg','gif'],
 language:'zh', // 多语言设置，需要引入local中相应的js，例如locales/zh.js
 minFileCount: 1, // 最小上传数量
 maxFileCount: 1, // 最大上传数量
+uploadAsync: true, //默认异步上传
 showCancel:false, // 显示取消按钮
 showZoom:false, // 显示预览按钮
 showBrowse:true,
@@ -81,9 +82,17 @@ close: '<i class="fa fa-times"></i>' // 关闭图标
 <div class="form-group">
 <label class="control-label">上传封面图</label>
 <!--<input id="input-fas" name="input-fas[]" type="file" multiple>-->
-<input id="input-b2" name="input-b2" type="file" class="file" value="document.getElementById('input-b2').files[0].title">
+{{ articleform.cover(value = articleform.cover) }}
+<input id="input-b2" name="input-b2" type="file" class="file">
 </div>
-{{ wtf.form_field(articleform.submit, class="btn btn-primary") }}
+{{ wtf.form_field(articleform.submit, class="btn btn-primary", onclick="setvaluetocover()") }}
 </form>
 <br>
+<script>
+    function setvaluetocover()
+    {
+        var value = document.getElementsByClassName("file-caption-name")[0].value;
+        $("#cover").attr("value", value);
+    }
+</script>
 {% endblock %}

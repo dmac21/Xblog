@@ -46,7 +46,10 @@ def write_article():
     articleform = ArticleForm()
     if articleform.validate_on_submit():
         body_html = request.form['xblog-editormd-html-code']
-        cover = config.QINIU_DOMAIN + "/" + request.form['input-b2']
+        if not request.form['cover']:
+            cover = None
+        else:
+            cover = config.QINIU_DOMAIN + "/" + request.form['cover']
         article = Article(title=articleform.title.data, abstract=articleform.abstract.data, body=articleform.body.data,
                           articletype_id=articleform.article_type.data, articlesource_id=articleform.article_source.data,
                           body_html=body_html, cover=cover, author=current_user)
@@ -65,7 +68,10 @@ def update_article(id):
                               article_source=article.articlesource_id, article_type=article.articletype_id)
     if articleform.validate_on_submit():
         body_html = request.form['xblog-editormd-html-code']
-        cover = config.QINIU_DOMAIN + "/" + request.form['input-b2']
+        if not request.form['cover']:
+            cover = None
+        else:
+            cover = config.QINIU_DOMAIN + "/" + request.form['cover']
         article.title = articleform.title.data
         article.abstract = articleform.abstract.data
         article.body = articleform.body.data
