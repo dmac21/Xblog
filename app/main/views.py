@@ -10,6 +10,10 @@ from ..models import User, Role, Article, Articletype, Articlesource, Blogview
 from flask_login import login_required, current_user
 from datetime import datetime
 import os
+import qiniu
+import os, random, string
+from werkzeug.utils import secure_filename
+from config import config
 
 
 @main.app_context_processor
@@ -42,8 +46,10 @@ def write_article():
     articleform = ArticleForm()
     if articleform.validate_on_submit():
         body_html = request.form['xblog-editormd-html-code']
+        cover = config.QINIU_DOMAIN + "/" + request.form['input-b2']
         article = Article(title=articleform.title.data, abstract=articleform.abstract.data, body=articleform.body.data,
-                          articletype_id=articleform.article_type.data, articlesource_id=articleform.article_source.data, body_html=body_html, author=current_user)
+                          articletype_id=articleform.article_type.data, articlesource_id=articleform.article_source.data,
+                          body_html=body_html, cover=cover, author=current_user)
         db.session.add(article)
         db.session.commit()
         flash(u"发布文章成功！")
@@ -59,10 +65,12 @@ def update_article(id):
                               article_source=article.articlesource_id, article_type=article.articletype_id)
     if articleform.validate_on_submit():
         body_html = request.form['xblog-editormd-html-code']
+        cover = config.QINIU_DOMAIN + "/" + request.form['input-b2']
         article.title = articleform.title.data
         article.abstract = articleform.abstract.data
         article.body = articleform.body.data
         article.body_html = body_html
+        article.cover = cover
         article.articletype_id = articleform.article_type.data
         article.articlesource_id=articleform.article_source.data
         article.author = current_user
@@ -145,22 +153,31 @@ def edit_profile_admin(id):
 @main.route('/upload', methods=['POST'])
 @login_required
 def upload():
-    parent_path = os.path.dirname(__file__)
-    app_path = os.path.dirname(parent_path)
-    upload_path = app_path + '/static/upload/'
-
-    file = request.files.get('editormd-image-file')
-    if not file:
+    f = request.files.get("input-b2", None) or request.files.get('editormd-image-file', None)
+    if not f:
         res = {
             'success': 0,
             'message': u'图片格式异常'
         }
-    else:
-        file_path = upload_path + file.filename
-        file.save(file_path)
+        return jsonify(res)
+    filename = secure_filename(f.filename)
+    # sfx = filename.rsplit(".")[1]
+    q = qiniu.Auth(config.QINIU_AK, config.QINIU_SK)
+    key = filename
+    # key = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(5)) + "." + sfx
+    token = q.upload_token(config.QINIU_BUCKET, key, 3600)
+    ret, info = qiniu.put_data(token, key, f.read())
+    if ret is not None:
+        qiniu_url = config.QINIU_DOMAIN + "/" + ret['key']
         res = {
             'success': 1,
             'message': u'图片上传成功',
-            'url': '/static/upload/{}'.format(file.filename)
+            'url': qiniu_url
         }
-    return jsonify(res)
+        return jsonify(res)
+    else:
+        res = {
+            'success': 0,
+            'message': u'图片上传失败'
+        }
+        return jsonify(res)

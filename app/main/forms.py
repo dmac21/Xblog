@@ -46,8 +46,9 @@ class ArticleForm(FlaskForm):
     article_type = SelectField(u'文章归类', coerce=int)
     abstract = TextAreaField(u'文章摘要', validators=[DataRequired(), Length(1, 150, message=u"长度必须在150个字符以内")], render_kw={'placeholder': '1-150个文字', 'autocomplete': 'off'})
     body = TextAreaField(u'文章正文', validators=[DataRequired()], render_kw={'placeholder': '写点什么吧', 'autocomplete': 'off'})
+    # cover = StringField(render_kw={'id':"input-b2", 'type':"file", 'class':"file"})
     submit = SubmitField(u'提交')
-    cancel = SubmitField(u'取消', render_kw={'data-dismiss': 'modal'})
+    # cancel = SubmitField(u'取消', render_kw={'data-dismiss': 'modal'})
 
     def __init__(self, *args, **kwargs):
         super(ArticleForm, self).__init__(*args, **kwargs)

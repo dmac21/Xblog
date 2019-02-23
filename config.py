@@ -21,6 +21,10 @@ class Config(object):
     XBLOG_MAIL_SUBJECT_PREFIX = '[Xblog]'
     XBLOG_MAIL_SENDER = 'Xblog Admin <1073838586@qq.com>'
     XBLOG_ADMIN = '1073838586@qq.com'
+    QINIU_AK = 'LrU-HGHiDtPz7-yp7cGJ8fGIom1dThcxCwi-1YOP'
+    QINIU_SK = 'GjvnMyzgL-dUXFba0L2zU_yjXE1Be39c3eLC6RoT'
+    QINIU_BUCKET = 'xblog'
+    QINIU_DOMAIN = 'http://pn6gtjkb6.bkt.clouddn.com'
 
     @staticmethod
     def init_app(app):

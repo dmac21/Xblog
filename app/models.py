@@ -163,6 +163,7 @@ class Article(db.Model):
     abstract = db.Column(db.Text)
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
+    cover = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     views = db.Column(db.Integer, default=0)
     update_timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)

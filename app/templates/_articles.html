@@ -3,7 +3,11 @@
         <div class="media">
           <div class="media-left" style="position: relative">
             <a href="/article/{{ article.id }}">
-              <img class="media-object" data-src="holder.js/100x100" alt="100x100" src="/static/cover.jpg">
+            {% if not article.cover %}
+                <img class="media-object" alt="100x100" src="/static/cover.jpg">
+            {% else %}
+                <img class="media-object" alt="100x100" src="{{ article.cover }}?imageView2/1/w/200/h/123">
+            {% endif %}
             </a>
             <div style="position:absolute;right:0;bottom:0">
                 <span class="label label-danger">{{ article.articletype.name }}</span>

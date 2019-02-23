@@ -29,19 +29,19 @@
     });
 </script>
 <script>
-$("#input-fas").fileinput({
+$("#input-b2").fileinput({
 theme: "fas",
 uploadUrl: "/upload",
 allowedFileExtensions: ['png','jpg','jpeg','gif'],
 language:'zh', // 多语言设置，需要引入local中相应的js，例如locales/zh.js
 minFileCount: 1, // 最小上传数量
-maxFileCount: 5, // 最大上传数量
+maxFileCount: 1, // 最大上传数量
 showCancel:false, // 显示取消按钮
 showZoom:false, // 显示预览按钮
 showBrowse:true,
-showRemove: false, // 显示删除按钮
-showUpload: false,
-showCaption:false, // 显示文件文本框
+showRemove: true, // 显示删除按钮
+showUpload: true,
+showCaption: true, // 显示文件文本框
 dropZoneEnabled:true, // 是否可拖拽
 uploadLabel:"上传附件", // 上传按钮内容
 browseLabel: '选择附件', // 浏览按钮内容
@@ -81,10 +81,9 @@ close: '<i class="fa fa-times"></i>' // 关闭图标
 <div class="form-group">
 <label class="control-label">上传封面图</label>
 <!--<input id="input-fas" name="input-fas[]" type="file" multiple>-->
-<input id="input-b2" name="input-b2" type="file" class="file">
+<input id="input-b2" name="input-b2" type="file" class="file" value="document.getElementById('input-b2').files[0].title">
 </div>
 {{ wtf.form_field(articleform.submit, class="btn btn-primary") }}
-{{ wtf.form_field(articleform.cancel, class="btn btn-danger") }}
 </form>
 <br>
 {% endblock %}
