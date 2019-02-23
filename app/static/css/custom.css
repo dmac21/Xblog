@@ -26,6 +26,11 @@ div.pagination {
     margin: 0 0;
 }
 
+.file-preview {
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
 footer {
     background-color: #11281f;
 }

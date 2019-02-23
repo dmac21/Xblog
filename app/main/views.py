@@ -71,7 +71,7 @@ def update_article(id):
         db.session.commit()
         flash(u"更新文章成功！")
         return redirect(url_for('main.index'))
-    return render_template('update_article.html', articleform=articleform)
+    return render_template('editarticle.html', articleform=articleform)
 
 
 @main.route('/user/<username>')

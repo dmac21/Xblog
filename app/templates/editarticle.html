@@ -2,10 +2,13 @@
 {% block styles %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static',filename='editormd/css/editormd.css') }}"/>
+<link href="{{ url_for('static',filename='css/fileinput.min.css') }}" media="all" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block scripts %}
 <script src="{{ url_for('static',filename='editormd/examples/js/jquery.min.js') }}"></script>
 <script src="{{ url_for('static',filename='editormd/editormd.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/fileinput.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/locales/zh.js') }}"></script>
 <script type="text/javascript">
     $(function () {
         var testEditor = editormd("xblog-editormd", {
@@ -25,6 +28,43 @@
         });
     });
 </script>
+<script>
+$("#input-fas").fileinput({
+theme: "fas",
+uploadUrl: "/upload",
+allowedFileExtensions: ['png','jpg','jpeg','gif'],
+language:'zh', // 多语言设置，需要引入local中相应的js，例如locales/zh.js
+minFileCount: 1, // 最小上传数量
+maxFileCount: 5, // 最大上传数量
+showCancel:false, // 显示取消按钮
+showZoom:false, // 显示预览按钮
+showBrowse:true,
+showRemove: false, // 显示删除按钮
+showUpload: false,
+showCaption:false, // 显示文件文本框
+dropZoneEnabled:true, // 是否可拖拽
+uploadLabel:"上传附件", // 上传按钮内容
+browseLabel: '选择附件', // 浏览按钮内容
+hideThumbnailContent:false, // 是否隐藏文件内容
+fileActionSettings: { // 在预览窗口中为新选择的文件缩略图设置文件操作的对象配置
+showRemove: true, // 显示删除按钮
+showUpload: true, // 显示上传按钮
+showDownload: false, // 显示下载按钮
+showZoom: true, // 显示预览按钮
+showDrag: false, // 显示拖拽
+removeIcon: '<i class="fa fa-trash"></i>', // 删除图标
+uploadIcon: '<i class="fa fa-upload"></i>', // 上传图标
+zoomIcon: '<i class="fa fa-eye"></i>', // 预览图标
+uploadRetryIcon: '<i class="fa fa-repeat"></i>' // 重试图标
+},
+previewZoomButtonIcons:{
+toggleheader: '<i class="fa fa-search-minus"></i>', // 缩小图标
+fullscreen: '<i class="fa fa-window-maximize"></i>', // 全屏图标
+borderless: '<i class="fa fa-circle-o-notch"></i>', //无边界模式图标
+close: '<i class="fa fa-times"></i>' // 关闭图标
+}
+});
+</script>
 {{ super() }}
 {% endblock %}
 {% block page_content %}
@@ -38,6 +78,11 @@
 {{ articleform.body() }}
 </div>
 {{ wtf.form_field(articleform.abstract) }}
+<div class="form-group">
+<label class="control-label">上传封面图</label>
+<!--<input id="input-fas" name="input-fas[]" type="file" multiple>-->
+<input id="input-b2" name="input-b2" type="file" class="file">
+</div>
 {{ wtf.form_field(articleform.submit, class="btn btn-primary") }}
 {{ wtf.form_field(articleform.cancel, class="btn btn-danger") }}
 </form>
