@@ -82,7 +82,7 @@ close: '<i class="fa fa-times"></i>' // 关闭图标
 <div class="form-group">
 <label class="control-label">上传封面图</label>
 <!--<input id="input-fas" name="input-fas[]" type="file" multiple>-->
-{{ articleform.cover(value = articleform.cover) }}
+{{ articleform.cover() }}
 <input id="input-b2" name="input-b2" type="file" class="file">
 </div>
 {{ wtf.form_field(articleform.submit, class="btn btn-primary", onclick="setvaluetocover()") }}
@@ -91,8 +91,14 @@ close: '<i class="fa fa-times"></i>' // 关闭图标
 <script>
     function setvaluetocover()
     {
-        var value = document.getElementsByClassName("file-caption-name")[0].value;
-        $("#cover").attr("value", value);
+        if (document.getElementById("cover").value == ""){
+            var value = document.getElementsByClassName("file-caption-name")[0].value;
+            $("#cover").attr("value", value);
+        }
+        else {
+            var value = document.getElementById("cover").value.split("/").pop();
+            $("#cover").attr("value", value);
+        }
     }
 </script>
 {% endblock %}

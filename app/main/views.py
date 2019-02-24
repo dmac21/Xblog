@@ -65,7 +65,7 @@ def write_article():
 def update_article(id):
     article = Article.query.filter_by(id=id).first()
     articleform = ArticleForm(title=article.title, abstract=article.abstract, body=article.body,
-                              article_source=article.articlesource_id, article_type=article.articletype_id)
+                              article_source=article.articlesource_id, article_type=article.articletype_id, cover=article.cover)
     if articleform.validate_on_submit():
         body_html = request.form['xblog-editormd-html-code']
         if not request.form['cover']:
