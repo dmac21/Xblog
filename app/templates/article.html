@@ -42,7 +42,8 @@
         </a>
     </div>
     {% endif %}
-<hr>
+<h4 id="comments"><i class="fa fa-comment"></i>评论</h4>
+{% include '_comments.html' %}
 <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
   <div>如果觉得对你有帮助，可以请我喝杯茶或者吃个饭</div>
   <button class="btn btn-danger btn-sm" id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">

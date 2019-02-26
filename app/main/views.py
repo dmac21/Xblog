@@ -6,7 +6,7 @@ from . import main
 from .. import db
 from ..auth.forms import LoginForm, RegisterForm
 from .forms import EditProfileForm, EditProfileAdminForm, ArticleForm, CommentFrom
-from ..models import User, Role, Article, Articletype, Articlesource, Blogview
+from ..models import User, Role, Article, Articletype, Articlesource, Blogview, Comment
 from flask_login import login_required, current_user
 from datetime import datetime
 import os
@@ -101,12 +101,22 @@ def user(username):
                            articles=articles)
 
 
-@main.route('/article/<int:id>')
+@main.route('/article/<int:id>', methods=['GET', 'POST'])
 def article(id):
     article = Article.query.filter_by(id=id).first()
+    comments = Comment.query.filter_by(article_id=id).all()
     article.add_view()
     commentform = CommentFrom()
-    return render_template('article.html', article=article, commentform=commentform)
+    if commentform.validate_on_submit():
+        comment = Comment(author_name=commentform.nickname.data,
+                          author_email=commentform.email.data,
+                          body=commentform.body.data,
+                          article_id=id)
+        db.session.add(comment)
+        db.session.commit()
+        flash(u'你的评论已经成功发表！')
+        return redirect(url_for('.article', id=article.id, page=-1))
+    return render_template('article.html', article=article, commentform=commentform, comments=comments)
 
 
 @main.route('/articletype/<int:id>')

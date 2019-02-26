@@ -8,6 +8,8 @@ from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from flask import current_app, request
 import hashlib
+from markdown import markdown
+import bleach
 
 
 class Permission:
@@ -170,6 +172,7 @@ class Article(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     articletype_id = db.Column(db.Integer, db.ForeignKey('articletypes.id'))
     articlesource_id = db.Column(db.Integer, db.ForeignKey('articlesources.id'))
+    comments = db.relationship('Comment', backref='article', lazy='dynamic')
 
     def add_view(self):
         self.views += 1
@@ -193,9 +196,34 @@ class Article(db.Model):
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    author_name = db.Column(db.String(64))
+    author_email = db.Column(db.String(64))
+    avatar_hash = db.Column(db.String(32))
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    article_id = db.Column(db.Integer, db.ForeignKey('article.id'))
+
+    def __init__(self, **kwargs):
+        super(Comment, self).__init__(**kwargs)
+        if self.author_email is not None and self.avatar_hash is None:
+            self.avatar_hash = self.gravatar_hash()
+
+    @staticmethod
+    def on_changed_body(target, value, oldvalue, initiator):
+        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'code', 'em', 'i', 'strong']
+        target.body_html = bleach.linkify(bleach.clean(markdown(value, output_format='html'), tags=allowed_tags, strip=True))
+
+    def gravatar_hash(self):
+        return hashlib.md5(self.author_email.lower().encode('utf-8')).hexdigest()
+
+    def gravatar(self, size=100, default='identicon', rating='g'):
+        url = 'https://secure.gravatar.com/avatar'
+        hash = self.avatar_hash or self.gravatar_hash()
+        return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(url=url, hash=hash, size=size, default=default, rating=rating)
+
+
+db.event.listen(Comment.body, 'set', Comment.on_changed_body)
 
 
 class Articletype(db.Model):
