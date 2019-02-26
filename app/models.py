@@ -224,5 +224,5 @@ class Blogview(db.Model):
             db.session.add(v)
             db.session.commit()
         v.views += 1
-        db.session.add(self)
+        db.session.add(v)
         db.session.commit()
