@@ -11,4 +11,4 @@ worker_class = 'gevent' #使用gevent模式，还可以使用sync 模式，默�
 workers = multiprocessing.cpu_count() * 2 + 1    #进程数
 threads = 2 #指定每个进程开启的线程数
 accesslog = './acess.log'
-errorlog = './error.log
+errorlog = './error.log'
