@@ -5,6 +5,7 @@
 <link href="{{ url_for('static', filename='editormd/css/editormd.css') }}" rel="stylesheet" />
 {% endblock %}
 {% block scripts %}
+<script src="{{ url_for('static',filename='js/replycomment.js') }}"></script>
 <script src="{{ url_for('static',filename='editormd/examples/js/jquery.min.js') }}"></script>
 <script src="{{ url_for('static',filename='editormd/editormd.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='editormd/lib/marked.min.js') }}"></script>
@@ -65,6 +66,7 @@
     <div class="col-md-8" id="submit-comment-container">
         <form class="submit-comment-form" id="submit-comment-form" method="post" action="">
             {{ commentform.csrf_token }}
+            {{ commentform.follow(type='hidden') }}
             <div class="form-group">
                 {{ commentform.nickname.label }}{{ commentform.nickname(class='form-control', value=current_user.username) }}
             </div>

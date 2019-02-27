@@ -106,7 +106,7 @@ def article(id):
     article = Article.query.filter_by(id=id).first()
     comments = Comment.query.filter_by(article_id=id).all()
     article.add_view()
-    commentform = CommentFrom()
+    commentform = CommentFrom(request.form, follow=-1)
     if commentform.validate_on_submit():
         comment = Comment(author_name=commentform.nickname.data,
                           author_email=commentform.email.data,

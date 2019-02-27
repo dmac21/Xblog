@@ -17,6 +17,11 @@
                 {% endif %}
             </div>
         </div>
+        <div style="text-align:right">
+            <button class="btn btn-sm btn-info" onclick="go_to_reply('{{ comment.id }}', '{{ comment.author_name }}')">
+                <i class="fa fa-comment"></i> 回复
+            </button>
+        </div>
     </li>
     {% endfor %}
 </ul>
