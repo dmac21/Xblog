@@ -3,6 +3,16 @@
 <ul class="comments" style="padding-left:0">
     {% for comment in comments %}
     <li class="comment">
+        {% if comment.comment_type == 'reply' %}
+            <p class="comment-reply-info">
+                <span class="fa fa-envelope"></span>
+                回复给<strong><i>
+                {% if comment.replyed_name() %}
+                    {{ comment.replyed_name() }}
+                {% endif %}
+                ：</i></strong>
+            </p>
+        {% endif %}
         <div class="comment-thumbnail">
                 <img class="img-rounded profile-thumbnail" src="{{ comment.gravatar(size=40) }}">
         </div>

@@ -6,7 +6,7 @@ from . import main
 from .. import db
 from ..auth.forms import LoginForm, RegisterForm
 from .forms import EditProfileForm, EditProfileAdminForm, ArticleForm, CommentFrom
-from ..models import User, Role, Article, Articletype, Articlesource, Blogview, Comment
+from ..models import User, Role, Article, Articletype, Articlesource, Blogview, Comment, Reply
 from flask_login import login_required, current_user
 from datetime import datetime
 import os
@@ -26,7 +26,8 @@ def inject_info():
     total_article_count = Article.query.count()
     blogviews = Blogview.query.first()
     return dict(articlesources=articlesources, articletypes=articletypes, top5_articles=top5_articles,
-                total_article_count=total_article_count, loginform=loginform, registerform=registerform, blogviews=blogviews)
+                total_article_count=total_article_count, loginform=loginform, registerform=registerform,
+                blogviews=blogviews, Comment=Comment)
 
 
 @main.route('/')
@@ -106,7 +107,7 @@ def article(id):
     article = Article.query.filter_by(id=id).first()
     comments = Comment.query.filter_by(article_id=id).all()
     article.add_view()
-    commentform = CommentFrom(request.form, follow=-1)
+    commentform = CommentFrom(request.form, reply=-1)
     if commentform.validate_on_submit():
         comment = Comment(author_name=commentform.nickname.data,
                           author_email=commentform.email.data,
@@ -114,6 +115,15 @@ def article(id):
                           article_id=id)
         db.session.add(comment)
         db.session.commit()
+        replyed_id = int(commentform.reply.data)
+        if replyed_id != -1:
+            replyed = Comment.query.get_or_404(replyed_id)
+            r = Reply(replyer=comment, replyed=replyed)
+            comment.comment_type = 'reply'
+            comment.reply_to = replyed.author_name
+            db.session.add(r)
+            db.session.add(comment)
+            db.session.commit()
         flash(u'你的评论已经成功发表！')
         return redirect(url_for('.article', id=article.id, page=-1))
     return render_template('article.html', article=article, commentform=commentform, comments=comments)

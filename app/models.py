@@ -193,6 +193,13 @@ class Article(db.Model):
             db.session.commit()
 
 
+class Reply(db.Model):
+    __tablename__ = 'replys'
+    replyer_id = db.Column(db.Integer, db.ForeignKey('comments.id'), primary_key=True)
+    replyed_id = db.Column(db.Integer, db.ForeignKey('comments.id'), primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -202,12 +209,34 @@ class Comment(db.Model):
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    comment_type = db.Column(db.String(32), default='comment')
+    reply_to = db.Column(db.String(32), default='no_reply')
     article_id = db.Column(db.Integer, db.ForeignKey('article.id'))
+    replyed = db.relationship('Reply',
+                              foreign_keys=[Reply.replyer_id],
+                              backref=db.backref('replyer', lazy='joined'),
+                              lazy='dynamic',
+                              cascade='all, delete-orphan')
+    replys = db.relationship('Reply',
+                             foreign_keys=[Reply.replyed_id],
+                             backref=db.backref('replyed', lazy='joined'),
+                             lazy='dynamic',
+                             cascade='all, delete-orphan')
 
     def __init__(self, **kwargs):
         super(Comment, self).__init__(**kwargs)
         if self.author_email is not None and self.avatar_hash is None:
             self.avatar_hash = self.gravatar_hash()
+
+    def is_reply(self):
+        if self.replyed.count() == 0:
+            return False
+        else:
+            return True
+
+    def replyed_name(self):
+        if self.is_reply():
+            return self.replyed.first().replyed.author_name
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):

@@ -66,7 +66,7 @@
     <div class="col-md-8" id="submit-comment-container">
         <form class="submit-comment-form" id="submit-comment-form" method="post" action="">
             {{ commentform.csrf_token }}
-            {{ commentform.follow(type='hidden') }}
+            {{ commentform.reply(type='hidden') }}
             <div class="form-group">
                 {{ commentform.nickname.label }}{{ commentform.nickname(class='form-control', value=current_user.username) }}
             </div>
