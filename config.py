@@ -15,7 +15,7 @@ class Config(object):
     MAIL_USE_SSL = True
     MAIL_USERNAME = '1073838586@qq.com'
     MAIL_PASSWORD = 'wkanmnnbqrzchjgb'
-    SQLALCHEMY_DATABASE_URI = 'mysql://root:f825c9e08b@127.0.0.1/xblog'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:F825c9e08b@@127.0.0.1/xblog?charset=utf8'
     SEND_FILE_MAX_AGE_DEFAULT = datetime.timedelta(seconds=1)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     XBLOG_MAIL_SUBJECT_PREFIX = '[Xblog]'
